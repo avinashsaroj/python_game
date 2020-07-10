@@ -2,33 +2,37 @@ import pygame,time,random
 pygame.init()
 white=(255,255,255)
 black=(0,0,0)
-
+window_x=1500
+window_y=700
 clk=pygame.time.Clock()
-gamewindow=pygame.display.set_mode((800,600))
-pygame.display.set_caption('snake game')
+gamewindow=pygame.display.set_mode((window_x,window_y))
+pygame.display.set_caption('snake game by Avinash')
 pygame.display.update()
-
+snake_x=15
+snake_y=15
 fon=pygame.font.SysFont(None,40)
 def snake(block,snakelength):
     for xy in snakelength:
-        pygame.draw.rect(gamewindow,black,[xy[0],xy[1],15,15])
+        pygame.draw.rect(gamewindow,black,[xy[0],xy[1],snake_x,snake_y])
+
 
 def message(msg):
     text=fon.render(msg,True,(0,0,0))
-    gamewindow.blit(text,[150,250])
+    gamewindow.blit(text,[350,250])
 def loop():
     close = False
     gameover=False
-    apple_x=int(random.randrange(0,800-15))
-    apple_y=int(random.randrange(0,600-15))
-    x, y = 400, 300
+    apple_x=int(random.randrange(0,window_x-snake_x))
+    apple_y=int(random.randrange(0,window_y-snake_y))
+    x, y = window_x/2, window_y/2
     update_x = 0
     update_y = 0
     slist=[]
     slength=1
     while not close:
         while gameover==True:
-            message("Game Over press 'r' to replay and 'q' to quit")
+
+            message("Game Over press 'r' to replay and 'q' to quit" )
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -55,12 +59,12 @@ def loop():
                   update_y=+25
                   update_x=0
 
-        if(x>=800 or x<0 or y>=600 or y<0):
+        if(x>=window_x or x<0 or y>=window_y or y<0):
             gameover=True
         x+=update_x
         y+=update_y
         gamewindow.fill(white)
-        pygame.draw.rect(gamewindow, black, [apple_x, apple_y, 15, 15])
+        pygame.draw.rect(gamewindow, black, [apple_x, apple_y, snake_x, snake_y])
         snakehead=[]
         snakehead.append(x)
         snakehead.append(y)
@@ -71,17 +75,23 @@ def loop():
             if seg==snakehead:
                 gameover=True
 
-        snake(15,slist)
+        snake(10,slist)
         pygame.display.update()
-        if (x>=apple_x-15 and x<=apple_x+15) and (y>=apple_y-15 and y<=apple_y+15) :
-            apple_x = int(random.randrange(0, 800 - 15))
-            apple_y = int(random.randrange(0, 600 - 15))
-            slength+=1
+        if (x>=apple_x-snake_x and x<=apple_x+snake_x) and (y>=apple_y-snake_y and y<=apple_y+snake_y) :
+            apple_x = int(random.randrange(0, window_x - snake_x))
+            apple_y = int(random.randrange(0, window_y - snake_y))
+            slength=slength+1
+
+
+
+
 
         clk.tick(10)
 
 
     time.sleep(0.1)
+    print(slength*3)
+
     pygame.quit()
     quit()
 
